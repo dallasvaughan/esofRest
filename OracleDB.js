@@ -11,9 +11,9 @@ getSigFromDB(function(callback) {
 function getSigFromDB(callback) {
     oracledb.getConnection(
         {
-            user: "esofds",
-            password: "esofdspassword",
-            connectString: "local.db.des.usps.com:1521/XE"
+            user: "user",
+            password: "password",
+            connectString: "connectString"
         },
         function (err, connection) {
             if (err) {
