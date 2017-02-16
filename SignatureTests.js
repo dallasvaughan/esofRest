@@ -6,110 +6,96 @@ var oracledb = require('oracledb');
 var server = 'http://localhost:8080';
 var uuid;
 
-describe('GET /esof/api/v1.0/system/signatures/{status}?userId={user}', function() {
-    describe('Test Case 1: /esof/api/v1.0/system/signatures/?userId=user', function () {
-        it('Returns status 200', function(done) {
-            chai.request(server)
-                .get('/esof/api/v1.0/system/signatures/?userId=user')
-                .auth('system', 'password')
-                .end(function (err, res) {
-                    res.should.have.status(200);
-                    if (JSON.parse(res.text).length === 0) {
-                        console.log("No signatures on file.")
-                    } else {
-                        JSON.parse(res.text).length.should.be.at.least(1);
-                    }
-                    done();
-                });
-        });
+//Vary the {status} parameter
+describe('GET /esof/api/v1.0/system/signatures/{status}?userId=user', function() {
+    it('Test Case 1: /esof/api/v1.0/system/signatures/?userId=user', function (done) {
+        chai.request(server)
+            .get('/esof/api/v1.0/system/signatures/?userId=user')
+            .auth('system', 'password')
+            .end(function (err, res) {
+                res.should.have.status(200);
+                if (JSON.parse(res.text).length === 0) {
+                    console.log("No signatures on file.")
+                } else {
+                    JSON.parse(res.text).length.should.be.at.least(1);
+                }
+                done();
+            });
     });
-
-    describe('Test Case 2: /esof/api/v1.0/system/signatures/active?userId=user', function () {
-        it('Returns status 200', function(done) {
-            chai.request(server)
-                .get('/esof/api/v1.0/system/signatures/active?userId=user')
-                .auth('system', 'password')
-                .end(function (err, res) {
-                    res.should.have.status(200);
-                    if (JSON.parse(res.text).length === 0) {
-                        console.log("No signatures on file.")
-                    } else {
-                        JSON.parse(res.text).length.should.equal(1);
-                    }
-                    done();
-                });
-        });
+    it('Test Case 2: /esof/api/v1.0/system/signatures/active?userId=user', function (done) {
+        chai.request(server)
+            .get('/esof/api/v1.0/system/signatures/active?userId=user')
+            .auth('system', 'password')
+            .end(function (err, res) {
+                res.should.have.status(200);
+                if (JSON.parse(res.text).length === 0) {
+                    console.log("No signatures on file.")
+                } else {
+                    JSON.parse(res.text).length.should.equal(1);
+                }
+                done();
+            });
     });
-
-    describe('Test Case 3: /esof/api/v1.0/system/signatures/inactive?userId=user', function () {
-        it('Returns status 200', function(done) {
-            chai.request(server)
-                .get('/esof/api/v1.0/system/signatures/inactive?userId=user')
-                .auth('system', 'password')
-                .end(function (err, res) {
-                    res.should.have.status(200);
-                    if (JSON.parse(res.text).length === 0) {
-                        console.log("No signatures on file.")
-                    } else {
-                        JSON.parse(res.text).length.should.be.at.least(1);
-                    }
-                    done();
-                });
-        });
-    });
-
-    describe('Test Case 4: /esof/api/v1.0/system/signatures/invalidStatus?userId=user', function () {
-        it('Returns status 404', function(done) {
-            chai.request(server)
-                .get('/esof/api/v1.0/system/signatures/invalidStatus?userId=user')
-                .auth('system', 'password')
-                .end(function (err, res) {
-                    res.should.have.status(404);
-                    done();
-                });
-        });
-    });
-
-    describe('Test Case 5: /esof/api/v1.0/system/signatures/?userId=invalidUser', function () {
-        it('Returns status 200, empty response body', function(done) {
-            chai.request(server)
-                .get('/esof/api/v1.0/system/signatures/?userId=invalidUser')
-                .auth('system', 'password')
-                .end(function (err, res) {
-                    res.should.have.status(200);
-                    JSON.parse(res.text).should.be.empty;
-                    done();
-                });
-        });
-    });
-
-    describe('Test Case 6: /esof/api/v1.0/system/signatures/active?userId=', function () {
-        it('Returns status 200, empty response body', function(done) {
-            chai.request(server)
-                .get('/esof/api/v1.0/system/signatures/active?userId=')
-                .auth('system', 'password')
-                .end(function (err, res) {
-                    res.should.have.status(200);
-                    JSON.parse(res.text).should.be.empty;
-                    done();
-                });
-        });
+    it('Test Case 3: /esof/api/v1.0/system/signatures/inactive?userId=user', function (done) {
+        chai.request(server)
+            .get('/esof/api/v1.0/system/signatures/inactive?userId=user')
+            .auth('system', 'password')
+            .end(function (err, res) {
+                res.should.have.status(200);
+                if (JSON.parse(res.text).length === 0) {
+                    console.log("No signatures on file.")
+                } else {
+                    JSON.parse(res.text).length.should.be.at.least(1);
+                }
+                done();
+            });
     });
 });
 
+//Vary the {user} parameter
+describe('GET /esof/api/v1.0/system/signatures?userId={user}', function() {
+    it('Test Case 1: /esof/api/v1.0/system/signatures/invalidStatus?userId=user', function(done) {
+        chai.request(server)
+            .get('/esof/api/v1.0/system/signatures/invalidStatus?userId=user')
+            .auth('system', 'password')
+            .end(function (err, res) {
+                res.should.have.status(404);
+                done();
+            });
+    });
+    it('Test Case 2: /esof/api/v1.0/system/signatures/?userId=invalidUser', function(done) {
+        chai.request(server)
+            .get('/esof/api/v1.0/system/signatures/?userId=invalidUser')
+            .auth('system', 'password')
+            .end(function (err, res) {
+                res.should.have.status(200);
+                JSON.parse(res.text).should.be.empty;
+                done();
+            });
+    });
+    it('Test Case 3: /esof/api/v1.0/system/signatures/active?userId=', function(done) {
+        chai.request(server)
+            .get('/esof/api/v1.0/system/signatures/active?userId=')
+            .auth('system', 'password')
+            .end(function (err, res) {
+                res.should.have.status(200);
+                JSON.parse(res.text).should.be.empty;
+                done();
+            });
+    });
+});
+
+//Vary the {UUID} parameter
 describe('GET /esof/api/v1.0/system/signatures/{UUID}?userId={user}', function() {
-    describe('Test Case 1: /esof/api/v1.0/system/signatures/{userValidUUID}?userId=user', function () {
-        getSigUUIDFromDB('user');
-        it('Response has status 200', function(done) {
-            chai.request(server)
-                .get('/esof/api/v1.0/system/signatures/'+uuid+'?userId=user')
-                .auth('system','password')
-                .end(function(err, res) {
-                    console.log(res);
-                    res.should.have.status(200);
-                    done();
-                });
-        });
+    getSigUUIDFromDB('user');
+    it('Test Case 1: /esof/api/v1.0/system/signatures/{userValidUUID}?userId=user', function(done) {
+        chai.request(server)
+            .get('/esof/api/v1.0/system/signatures/'+uuid+'?userId=user')
+            .auth('system','password')
+            .end(function(err, res) {
+                res.should.have.status(200);
+                done();
+            });
     });
 });
 
