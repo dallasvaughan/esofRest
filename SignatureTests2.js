@@ -13,7 +13,7 @@ describe('GET /esof/api/v1.0/system/signatures/{UUID}?userId=user', function() {
     //Here's where my issue is.  I need to define UUID to pass into getSignatureByUUID.  I have a separate piece of code that works
     //to ping our database and retreive the UUID.  But I'm not sure how to incorporate it such that it runs before the call to our
     //REST endpoint, which in turn has to run before the it block with the test case/assertion.
-    var uuid;
+    var conn;
 
     //runs once for this entire block to populate UUID of signature we will test
     before(function(done) {
@@ -28,34 +28,63 @@ describe('GET /esof/api/v1.0/system/signatures/{UUID}?userId=user', function() {
                 console.error(err.message);
                 return;
             }
-            connection.execute(
-                "SELECT SIGNATURE_IDENTIFIER " +
-                "FROM SIGNATURE " +
-                "WHERE STATUS = 'ACTIVE'",
-                function (err, result) {
-                    if (err) {
-                        console.error(err.message);
-                        doRelease(connection);
-                        return;
-                    }
-                    doRelease(connection);
-                    uuid = result.rows[0][0];
-                    done();
-                }
-            )
+            conn = connection;
+            done();
         }
     )});
 
     it('Response has status 200', function(done) {
-        chai.request(server)
-            .get('/esof/api/v1.0/system/signatures/'+uuid+'?userId=user')
-            .auth('system','password')
-            .end(function(err, res) {
-                res.should.have.status(200);
-                done();
-            });
+        conn.execute(
+            "SELECT SIGNATURE_IDENTIFIER " +
+            "FROM SIGNATURE " +
+            "WHERE STATUS = 'ACTIVE' AND USER_ID = 'user'",
+            function (err, result) {
+                if (err) {
+                    console.error(err.message);
+                    return;
+                }
+                var uuid = result.rows[0][0];
+                console.log("user uuid: " + uuid);
 
+                chai.request(server)
+                    .get('/esof/api/v1.0/system/signatures/'+uuid+'?userId=user')
+                    .auth('system','password')
+                    .end(function(err, res) {
+                        res.should.have.status(200);
+                        done();
+                    });
+            }
+        );
     });
+
+    it('Response has status 200 2', function(done) {
+        conn.execute(
+            "SELECT SIGNATURE_IDENTIFIER " +
+            "FROM SIGNATURE " +
+            "WHERE STATUS = 'ACTIVE' AND USER_ID = 'user2'",
+            function (err, result) {
+                if (err) {
+                    console.error(err.message);
+                    return;
+                }
+                var uuid = result.rows[0][0];
+                console.log("user2 uuid: " + uuid);
+
+                chai.request(server)
+                    .get('/esof/api/v1.0/system/signatures/'+uuid+'?userId=user2')
+                    .auth('system','password')
+                    .end(function(err, res) {
+                        res.should.have.status(200);
+                        done();
+                    });
+            }
+        );
+    });
+
+    after(function(done) {
+        doRelease(conn);
+        done();
+    })
 });
 
 function doRelease(connection) {
@@ -64,4 +93,5 @@ function doRelease(connection) {
             if (err)
                 console.error(err.message);
         });
+
 }
