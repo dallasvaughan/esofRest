@@ -4,7 +4,6 @@ chai.use(chaiHttp);
 var should = chai.should();
 var oracledb = require('oracledb');
 var server = 'http://localhost:8080';
-var uuid;
 
 //Vary the {status} parameter
 describe('GET /esof/api/v1.0/system/signatures/{status}?userId=user', function() {
@@ -87,20 +86,9 @@ describe('GET /esof/api/v1.0/system/signatures?userId={user}', function() {
 
 //Vary the {UUID} parameter
 describe('GET /esof/api/v1.0/system/signatures/{UUID}?userId={user}', function() {
-    getSigUUIDFromDB('user');
-    it('Test Case 1: /esof/api/v1.0/system/signatures/{userValidUUID}?userId=user', function(done) {
-        chai.request(server)
-            .get('/esof/api/v1.0/system/signatures/'+uuid+'?userId=user')
-            .auth('system','password')
-            .end(function(err, res) {
-                res.should.have.status(200);
-                done();
-            });
-    });
-});
+    var conn;
 
-function getSigUUIDFromDB(user) {
-    before(function (done) {
+    before(function(done) {
         oracledb.getConnection(
             {
                 user: "esofds",
@@ -112,24 +100,43 @@ function getSigUUIDFromDB(user) {
                     console.error(err.message);
                     return;
                 }
-                connection.execute(
-                    "SELECT SIGNATURE_IDENTIFIER " +
-                    "FROM SIGNATURE " +
-                    "WHERE USER_ID = '" + user + "' AND STATUS = 'ACTIVE'",
-                    function (err, result) {
-                        if (err) {
-                            console.error(err.message);
-                            doRelease(connection);
-                            return;
-                        }
-                        doRelease(connection);
-                        uuid = result.rows[0][0];
-                        done();
-                    }
-                )
-            });
+                conn = connection;
+                done();
+            }
+        )
     });
-}
+
+    it('Test Case 1: /esof/api/v1.0/system/signatures/{userValidUUID}?userId=user', function(done) {
+        conn.execute(
+            "SELECT SIGNATURE_IDENTIFIER " +
+            "FROM SIGNATURE " +
+            "WHERE STATUS = 'ACTIVE' AND USER_ID = 'user'",
+            function (err, result) {
+                if (err) {
+                    console.error(err.message);
+                    return;
+                }
+                var uuid = result.rows[0][0];
+                console.log("user uuid: " + uuid);
+
+                chai.request(server)
+                    .get('/esof/api/v1.0/system/signatures/'+uuid+'?userId=user')
+                    .auth('system','password')
+                    .end(function(err, res) {
+                        res.should.have.status(200);
+                        done();
+                    });
+            }
+        );
+    });
+
+    after(function(done) {
+        doRelease(conn);
+        done();
+    });
+
+});
+
 function doRelease(connection) {
     connection.close(
         function(err) {

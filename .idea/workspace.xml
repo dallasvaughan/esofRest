@@ -2,14 +2,8 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="796fa67c-701b-45fd-85f5-c45401035c27" name="Default" comment="Fixed getting uuid from DB before running test">
-      <change type="DELETED" beforePath="$PROJECT_DIR$/OracleDB.js" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/SignatureTests2.js" afterPath="" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/jsLibraryMappings.xml" afterPath="$PROJECT_DIR$/.idea/jsLibraryMappings.xml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/misc.xml" afterPath="$PROJECT_DIR$/.idea/misc.xml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/sonarIssues.xml" afterPath="$PROJECT_DIR$/.idea/sonarIssues.xml" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/SignatureTests.js" afterPath="$PROJECT_DIR$/SignatureTests.js" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/Test.iml" afterPath="$PROJECT_DIR$/Test.iml" />
     </list>
     <ignored path="Test.iws" />
     <ignored path=".idea/workspace.xml" />
@@ -64,16 +58,16 @@
       <file leaf-file-name="workspace.xml" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/.idea/workspace.xml">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="1782">
-              <caret line="820" column="10" lean-forward="false" selection-start-line="820" selection-start-column="10" selection-end-line="820" selection-end-column="10" />
+            <state relative-caret-position="1722">
+              <caret line="816" column="10" lean-forward="false" selection-start-line="816" selection-start-column="10" selection-end-line="816" selection-end-column="10" />
               <folding>
-                <marker date="1487283640000" expanded="true" signature="72633:72648" ph="..." />
+                <marker date="1487284124000" expanded="true" signature="70737:70752" ph="..." />
               </folding>
             </state>
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="SignatureTests2.js" pinned="false" current-in-tab="true">
+      <file leaf-file-name="SignatureTests2.js" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/SignatureTests2.js">
           <provider selected="true" editor-type-id="text-editor">
             <state relative-caret-position="0">
@@ -93,7 +87,7 @@
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="SignatureTests.js" pinned="false" current-in-tab="false">
+      <file leaf-file-name="SignatureTests.js" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/SignatureTests.js">
           <provider selected="true" editor-type-id="text-editor">
             <state relative-caret-position="1620">
@@ -992,7 +986,8 @@
   </component>
   <component name="VcsManagerConfiguration">
     <MESSAGE value="Updating some things" />
-    <option name="LAST_COMMIT_MESSAGE" value="Updating some things" />
+    <MESSAGE value="consolidated db changes" />
+    <option name="LAST_COMMIT_MESSAGE" value="consolidated db changes" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
@@ -1067,10 +1062,10 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/.idea/workspace.xml">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="1782">
-          <caret line="820" column="10" lean-forward="false" selection-start-line="820" selection-start-column="10" selection-end-line="820" selection-end-column="10" />
+        <state relative-caret-position="1722">
+          <caret line="816" column="10" lean-forward="false" selection-start-line="816" selection-start-column="10" selection-end-line="816" selection-end-column="10" />
           <folding>
-            <marker date="1487283640000" expanded="true" signature="72633:72648" ph="..." />
+            <marker date="1487284124000" expanded="true" signature="70737:70752" ph="..." />
           </folding>
         </state>
       </provider>
@@ -1264,18 +1259,18 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/SignatureTests.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="1620">
-          <caret line="108" column="7" lean-forward="false" selection-start-line="108" selection-start-column="7" selection-end-line="108" selection-end-column="7" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/SignatureTests2.js">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="0">
           <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/SignatureTests.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="1620">
+          <caret line="108" column="7" lean-forward="false" selection-start-line="108" selection-start-column="7" selection-end-line="108" selection-end-column="7" />
           <folding />
         </state>
       </provider>
