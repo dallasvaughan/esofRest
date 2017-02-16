@@ -2,34 +2,66 @@
 //MochaJS is the test framework (describe/it), chai & chaiHttp to make requests, oracledb to grab data from database.
 
 //In Mocha, anything with the before() hook like getSignatureByUUID is run before anything in an 'it' block.
-
+var oracledb = require('oracledb');
 var chai = require('chai');
 var chaiHttp = require('chai-http');
 chai.use(chaiHttp);
 var should = chai.should();
 var server = 'http://localhost:8080';
-var response;
-var UUID;
 
 describe('GET /esof/api/v1.0/system/signatures/{UUID}?userId=user', function() {
     //Here's where my issue is.  I need to define UUID to pass into getSignatureByUUID.  I have a separate piece of code that works
     //to ping our database and retreive the UUID.  But I'm not sure how to incorporate it such that it runs before the call to our
     //REST endpoint, which in turn has to run before the it block with the test case/assertion.
-    getSigEndpointByUUID(UUID)
-    it('Response has status 200', function() {
-        res.should.have.status(200);
+    var uuid;
+
+    //runs once for this entire block to populate UUID of signature we will test
+    before(function(done) {
+        oracledb.getConnection(
+        {
+            user: "esofds",
+            password: "esofdspassword",
+            connectString: "local.db.des.usps.com:1521/XE"
+        },
+        function (err, connection) {
+            if (err) {
+                console.error(err.message);
+                return;
+            }
+            connection.execute(
+                "SELECT SIGNATURE_IDENTIFIER " +
+                "FROM SIGNATURE " +
+                "WHERE STATUS = 'ACTIVE'",
+                function (err, result) {
+                    if (err) {
+                        console.error(err.message);
+                        doRelease(connection);
+                        return;
+                    }
+                    doRelease(connection);
+                    uuid = result.rows[0][0];
+                    done();
+                }
+            )
+        }
+    )});
+
+    it('Response has status 200', function(done) {
+        chai.request(server)
+            .get('/esof/api/v1.0/system/signatures/'+uuid+'?userId=user')
+            .auth('system','password')
+            .end(function(err, res) {
+                res.should.have.status(200);
+                done();
+            });
+
     });
 });
 
-
-function getSigEndpointByUUID(ID) {
-    before(function(done) {
-        chai.request(server)
-            .get('/esof/api/v1.0/system/signatures/'+ID+'?userId=user')
-            .auth('system','password')
-            .end(function(err, res) {
-                response = res;
-                done();
-            });
-    });
+function doRelease(connection) {
+    connection.close(
+        function(err) {
+            if (err)
+                console.error(err.message);
+        });
 }
